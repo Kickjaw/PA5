@@ -9,7 +9,7 @@ class organism;
 class grid {
 public:
 	int gridSize;
-	organism **G;
+	organism ***G;
 
 	grid(int size);
 
@@ -34,7 +34,7 @@ public:
 	virtual int whatAmI(void);
 	void move(grid G);
 	virtual void breed(void);
-	virtual void getStartvation(void);
+	virtual void getStarvation(void);
 	virtual void eat(void);
 
 };

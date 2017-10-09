@@ -13,9 +13,12 @@ organism::organism() {
 
 grid::grid(int size) {
 	gridSize = size;
-	G = new organism*[gridSize];
+	G = new organism**[gridSize]; // Indstantiate array of pointers to the row arrays.
 	if (G) for (int i = 0; i < gridSize; i++) {
-		G[i] = NULL;
+		G[i] = new  organism*[gridSize]; // Allocate the next row array
+		for (int j = 0; j < gridSize; j++) {
+			G[i][j] = NULL; // Each cell starts empty
+		}
 		if (!G[i]) exit(-1);
 	}
 	
@@ -35,6 +38,10 @@ int doodlebug::whatAmI(void) {
 	return 2;
 }
 
+
+/**
+ *
+ */
 void organism::move(grid G){
 	int direction;
 	int options = 0;
@@ -47,7 +54,7 @@ void organism::move(grid G){
 
 	}
 	if (G.checkDown(y_loc, x_loc)) {
-		optionsArray[options] = 2;
+		optionsArray[options] = 2; // add down option to option array
 		options = options + 1;
 	}
 	if (G.checkLeft(y_loc, x_loc)) {
@@ -55,7 +62,7 @@ void organism::move(grid G){
 		options = options + 1;
 	}
 	if (G.checkRight(y_loc, x_loc)) {
-		optionsArray[options] = 4;
+		optionsArray[options] = 4; // add right option to opt
 		options = options + 1;
 	}
 
@@ -78,14 +85,17 @@ void organism::move(grid G){
 void doodlebug::eat(void){};
 
 
-
-
-
 void grid::displayGrid(void) {
 	int bug;
+	
 	for (int i = 0; i < gridSize; i++) {
-		for (int j = 0; i < gridSize; i ++) {
-			bug = G[j][i].whatAmI();
+		for (int j = 0; j < gridSize; j++) {
+			if (G[i][j] == NULL) {// if cell is empty G will evaulate to NULL
+				bug = 0;
+			}
+			else {// else check for what cell contains
+				bug = G[i][j]->whatAmI();
+			}
 			switch(bug){
 				case 0:
 					printf(" ");
@@ -100,7 +110,6 @@ void grid::displayGrid(void) {
 					printf("something went wrong\n");
 					break;
 			}
-
 		}
 	printf("\n");
 	}
@@ -165,3 +174,9 @@ bool grid::checkRight(int y_loc, int x_loc) {
 		}
 	}
 }
+
+void doodlebug::breed(void){};
+void organism::getStarvation(void){};
+void doodlebug::getStarvation(void){};
+void organism::breed(void){};
+void organism::eat(void){};

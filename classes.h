@@ -30,12 +30,14 @@ public:
 	int y_loc;
 	int breedCount;
 	bool prey;
+	bool moved; //value to check if the bug has moved this step
+	int starvation;
 
 	organism();
 	virtual ~organism();
 
 	virtual int whatAmI(void);
-	virtual void move(grid G);
+	virtual grid move(grid Board);
 	virtual void breed(grid G);
 	virtual void getStarvation(void);
 	virtual void eat(void);
@@ -47,7 +49,7 @@ class ant: public organism {
 public:
 
 	virtual int whatAmI(void);
-	virtual void move(grid G);
+	virtual grid move(grid Board);
 	virtual void breed(grid G);
 	
 
@@ -58,12 +60,11 @@ public:
 class doodlebug: public organism {
 public:
 
-	int starvation;
 
 	doodlebug();
 
 	virtual int whatAmI(void);
-	virtual void move(grid G);
+	virtual grid move(grid Board);
 	virtual void breed(grid G);
 	virtual void getStarvation(void);
 	

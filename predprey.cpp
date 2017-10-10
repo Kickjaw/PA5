@@ -79,24 +79,44 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 
 	}
 
-	std::cout << gridSize << " " << doodlebugs << " " << ants << " " << time_steps << " " << seed << " " << pause <<"\n";
+	srand(seed);
 
+	grid Board(gridSize);
 
-	grid G(gridSize);
+	Board = generateAnts(ants, Board, gridSize);
 
-	G.displayGrid();
+	Board = generateDoodlebugs(doodlebugs, Board, gridSize);
 
-	G = generateAnts(ants, G, gridSize);
-
-	G.displayGrid();
-
+	Board.displayGrid();
+	//move all the doodlebugs
 	for (int i = 0; i < gridSize; i++) {
 		for (int j = 0; j < gridSize; j++) {
-			if (G.G[i][j]->isPrey()) {
-				printf("hello\n");
+			if (Board.G[i][j] != NULL) {
+				if (!Board.G[i][j]->isPrey()) {
+					Board = Board.G[i][j]->move(Board);
+					Board.G[i][j] = NULL;
+				}
 			}
 		}
 	}
+	printf("------------------------------------------------------------------\n");
+	Board.displayGrid();
+
+	//move all the ants
+	for (int i = 0; i < gridSize; i++) {
+		for (int j = 0; j < gridSize; j++) {
+			if (Board.G[i][j] != NULL) {
+				if (Board.G[i][j]->isPrey()) {
+					Board = Board.G[i][j]->move(Board);
+					Board.G[i][j] = NULL;
+				}
+			}
+		}
+	}
+
+	printf("------------------------------------------------------------------\n");
+
+	Board.displayGrid();
 
 
 

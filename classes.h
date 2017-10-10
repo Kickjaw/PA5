@@ -12,7 +12,7 @@ public:
 	organism ***G;
 
 	grid(int size);
-
+	void insertBug(int x, int y, int bugType);
 	void displayGrid(void);
 	bool checkUp(int y_loc, int x_loc);
 	bool checkDown(int y_loc, int x_loc);
@@ -30,6 +30,7 @@ public:
 	int breedCount;
 
 	organism();
+	virtual ~organism();
 
 	virtual int whatAmI(void);
 	void move(grid G);
@@ -41,6 +42,7 @@ public:
 
 class ant: public organism {
 public:
+
 	virtual void breed(void);
 	virtual int whatAmI(void);
 

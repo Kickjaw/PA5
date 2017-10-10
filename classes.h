@@ -33,8 +33,8 @@ public:
 	virtual ~organism();
 
 	virtual int whatAmI(void);
-	void move(grid G);
-	virtual void breed(void);
+	virtual void move(grid G);
+	virtual void breed(grid G);
 	virtual void getStarvation(void);
 	virtual void eat(void);
 
@@ -43,7 +43,8 @@ public:
 class ant: public organism {
 public:
 
-	virtual void breed(void);
+	virtual void move(grid G);
+	virtual void breed(grid G);
 	virtual int whatAmI(void);
 
 
@@ -54,8 +55,9 @@ class doodlebug: public organism {
 public:
 
 	int starvation;
-	void eat(void);
-	virtual void breed(void);
+	virtual void eat(void);
+	virtual void move(grid G);
+	virtual void breed(grid G);
 	virtual void getStarvation(void);
 	virtual int whatAmI(void);
 

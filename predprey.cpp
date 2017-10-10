@@ -15,6 +15,24 @@ grid generateAnts(int bugs, grid Board, int gridSize) {
 			x = rand() % gridSize;
 			y = rand() % gridSize;
 			if (Board.G[y][x] == NULL) {
+				Board.insertBug(x, y, 1);
+				placed = true;
+			}
+		}
+	}
+
+	return Board;
+}
+
+grid generateDoodlebugs(int doodlebugs, grid Board, int gridSize) {
+	int x, y;
+	bool placed;
+	for (int i = 0; i < gridSize; i++) {
+		placed = false;
+		while (!placed) { //runs this loop until the x,y coords are unocupied and places the pug in that spot
+			x = rand() % gridSize;
+			y = rand() % gridSize;
+			if (Board.G[y][x] == NULL) {
 				Board.insertBug(x, y, 2);
 				placed = true;
 			}

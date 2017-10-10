@@ -9,7 +9,17 @@ organism::organism() {
 	x_loc = 0;
 	y_loc = 0;
 	breedCount = 0;
+	prey = true;
 }
+
+doodlebug::doodlebug() {
+	lifeSpan = 0;
+	x_loc = 0;
+	y_loc = 0;
+	breedCount = 0;
+	prey = false;
+}
+
 
 organism::~organism() {
 
@@ -29,32 +39,41 @@ grid::grid(int size) {
 	
 
 }
-
-
+//organism methods
+//----------------------------------------------------------------------------------------------------
 int organism::whatAmI(void) {
 	return 0;
 }
+
+void organism::move(grid G){};
+
+void organism::breed(grid G){};
+
+void organism::getStarvation(void){};
+
+void organism::eat(void){};
+
+bool organism::isPrey(void) {
+	return prey;
+}
+
+
+
+
+
+
+//ant methods
+//-----------------------------------------------------------------------------------------------------
 
 int ant::whatAmI(void) {
 	return 1;
 }
 
-int doodlebug::whatAmI(void) {
-	return 2;
-}
-
-
-/**
- *
- */
-
-void organism::move(grid G){};
-
 void ant::move(grid G){
 	int direction;
 	int options = 0;
 	int optionsArray[4];
-
+	printf("hello\n");
 
 	if (G.checkUp(y_loc, x_loc)) {
 		optionsArray[options] = 1; //add up option to option array
@@ -76,7 +95,7 @@ void ant::move(grid G){
 
 
 	direction = optionsArray[rand() % options];
-
+	printf("hi\n");
 	ant *temp = new ant();
 	temp -> lifeSpan = lifeSpan + 1;
 	temp -> breedCount = breedCount + 1;
@@ -92,13 +111,21 @@ void ant::move(grid G){
 			temp -> x_loc = x_loc-1;
 		case(4):
 			temp -> x_loc = x_loc+1;
-
+	printf("hi\n");
 	G.G[temp->y_loc][temp->x_loc] = temp; //move the bug to the new cell
 	G.G[y_loc][x_loc] = NULL;//set old cell to null, may need to do this outside this function.
 
 	}
 }
 
+void ant::breed(grid G){};
+
+//doodlebug methods
+//------------------------------------------------------------------------------------------------------
+
+int doodlebug::whatAmI(void) {
+	return 2;
+}
  void doodlebug::move(grid G){
 // 	int direction;
 // 	int eatDirection;
@@ -141,11 +168,6 @@ void ant::move(grid G){
 // 			case 4:
  		}
 
-
-
-
-
-
 // 	if (!eat) {
 // 		if (G.checkUp(y_loc, x_loc)) {//checks if the cell is open
 // 			optionsArray[options] = 1; //add up option to option array
@@ -185,7 +207,67 @@ void ant::move(grid G){
 // 		}
 // 	}
 // }
+void doodlebug::breed(grid G){
+	int options = 0;
+	int direction;
+	int breedOptionsArray[4];
 
+	if (breedCount >= 8) {
+		if (G.checkUp(y_loc, x_loc)) {
+			breedOptionsArray[options] = 1; //add up option to option array
+			options = options + 1;
+		}
+		if (G.checkDown(y_loc, x_loc)) {
+			breedOptionsArray[options] = 2; // add down option to option array
+			options = options + 1;
+		}
+		if (G.checkLeft(y_loc, x_loc)) {
+			breedOptionsArray[options] = 3; //add left option to option array
+			options = options + 1;
+		}
+		if (G.checkRight(y_loc, x_loc)) {
+			breedOptionsArray[options] = 4; // add right option to opt
+			options = options + 1;
+		}
+
+		direction = breedOptionsArray[rand() % options];
+
+		switch(direction) {
+			case 1:
+				//add doodlebug up
+				G.G[y_loc][x_loc] = new doodlebug();
+			case 2:
+				//add doodlebug down
+				break;
+			case 3:
+				//add doodlebug left
+				break;
+			case 4:
+				//add doodlebug right
+				break;
+		}
+	}
+}
+
+
+void doodlebug::getStarvation(void){};
+
+//grid methods
+//---------------------------------------------------------------------------------------------
+void grid::insertBug(int x, int y, int bugType) {
+	if (bugType == 1) {
+		ant *A = new ant();
+		A -> x_loc = x;
+		A -> y_loc = y;
+		G[x][y] = A;
+	}
+	else if (bugType == 2) {
+		doodlebug *A = new doodlebug();
+		A -> x_loc = x;
+		A -> y_loc = y;
+		G[x][y] = A;
+	}
+}
 
 void grid::displayGrid(void) {
 	int bug;
@@ -277,64 +359,5 @@ bool grid::checkRight(int y_loc, int x_loc) {
 	}
 }
 
-void doodlebug::breed(grid G){
-	int options;
-	int direction;
-	int breedOptionsArray[4];
 
-	if (breedCount >= 8) {
-		if (G.checkUp(y_loc, x_loc)) {
-			breedOptionsArray[options] = 1; //add up option to option array
-			options = options + 1;
-		}
-		if (G.checkDown(y_loc, x_loc)) {
-			breedOptionsArray[options] = 2; // add down option to option array
-			options = options + 1;
-		}
-		if (G.checkLeft(y_loc, x_loc)) {
-			breedOptionsArray[options] = 3; //add left option to option array
-			options = options + 1;
-		}
-		if (G.checkRight(y_loc, x_loc)) {
-			breedOptionsArray[options] = 4; // add right option to opt
-			options = options + 1;
-		}
 
-		direction = breedOptionsArray[rand() % options];
-
-		switch(direction) {
-			case 1:
-				//add doodlebug up
-				G.G[y_loc][x_loc] = new doodlebug();
-			case 2:
-				//add doodlebug down
-				break;
-			case 3:
-				//add doodlebug left
-				break;
-			case 4:
-				//add doodlebug right
-				break;
-		}
-	}
-}
-void organism::getStarvation(void){};
-void doodlebug::getStarvation(void){};
-void ant::breed(grid G){};
-void organism::breed(grid G){};
-void organism::eat(void){};
-
-void grid::insertBug(int x, int y, int bugType) {
-	if (bugType == 1) {
-		ant *A = new ant();
-		A -> x_loc = x;
-		A -> y_loc = y;
-		G[x][y] = A;
-	}
-	else if (bugType == 2) {
-		doodlebug *A = new doodlebug();
-		A -> x_loc = x;
-		A -> y_loc = y;
-		G[x][y] = A;
-	}
-}

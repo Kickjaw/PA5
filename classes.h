@@ -12,6 +12,7 @@ public:
 	organism ***G;
 
 	grid(int size);
+
 	void insertBug(int x, int y, int bugType);
 	void displayGrid(void);
 	bool checkUp(int y_loc, int x_loc);
@@ -28,6 +29,7 @@ public:
 	int x_loc;
 	int y_loc;
 	int breedCount;
+	bool prey;
 
 	organism();
 	virtual ~organism();
@@ -37,15 +39,17 @@ public:
 	virtual void breed(grid G);
 	virtual void getStarvation(void);
 	virtual void eat(void);
+	bool isPrey(void);
 
 };
 
 class ant: public organism {
 public:
 
+	virtual int whatAmI(void);
 	virtual void move(grid G);
 	virtual void breed(grid G);
-	virtual int whatAmI(void);
+	
 
 
 
@@ -55,11 +59,14 @@ class doodlebug: public organism {
 public:
 
 	int starvation;
-	virtual void eat(void);
+
+	doodlebug();
+
+	virtual int whatAmI(void);
 	virtual void move(grid G);
 	virtual void breed(grid G);
 	virtual void getStarvation(void);
-	virtual int whatAmI(void);
+	
 
 
 };

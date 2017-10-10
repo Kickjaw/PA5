@@ -6,10 +6,10 @@
 #include <iostream>
 
 
-grid generateAnts(int bugs, grid Board, int gridSize) {
+grid generateAnts(int ants, grid Board, int gridSize) {
 	int x, y;
 	bool placed;
-	for (int i = 0; i < gridSize; i++) {
+	for (int i = 0; i < ants; i++) {
 		placed = false;
 		while (!placed) { //runs this loop until the x,y coords are unocupied and places the pug in that spot
 			x = rand() % gridSize;
@@ -27,7 +27,7 @@ grid generateAnts(int bugs, grid Board, int gridSize) {
 grid generateDoodlebugs(int doodlebugs, grid Board, int gridSize) {
 	int x, y;
 	bool placed;
-	for (int i = 0; i < gridSize; i++) {
+	for (int i = 0; i < doodlebugs; i++) {
 		placed = false;
 		while (!placed) { //runs this loop until the x,y coords are unocupied and places the pug in that spot
 			x = rand() % gridSize;
@@ -85,6 +85,19 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 	grid G(gridSize);
 
 	G.displayGrid();
+
+	G = generateAnts(ants, G, gridSize);
+
+	G.displayGrid();
+
+	for (int i = 0; i < gridSize; i++) {
+		for (int j = 0; j < gridSize; j++) {
+			if (G.G[i][j]->isPrey()) {
+				printf("hello\n");
+			}
+		}
+	}
+
 
 
 }

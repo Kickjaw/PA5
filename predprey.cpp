@@ -51,9 +51,9 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 		return 1;
 	}
 	//defaul values for command line arguments
-	int gridSize = 20;
+	int gridSize = 10;
 	int doodlebugs = 5;
-	int ants = 100;
+	int ants = 10;
 	int time_steps = 1000;
 	int seed = 1;
 	int pause = 0;
@@ -85,23 +85,25 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 
 	Board = generateAnts(ants, Board, gridSize);
 
-	Board = generateDoodlebugs(doodlebugs, Board, gridSize);
+	// Board = generateDoodlebugs(doodlebugs, Board, gridSize);
 
+	// Board.displayGrid();
+	// //move all the doodlebugs
+	// int count = 0;
+	// for (int i = 0; i < gridSize; i++) {
+	// 	for (int j = 0; j < gridSize; j++) {
+	// 		if (Board.G[i][j] != NULL) {
+	// 				count++;
+	// 				printf("%i\n", count);
+	// 			if (!Board.G[i][j]->isPrey()) {
+	// 				Board = Board.G[i][j]->move(Board);
+	// 				Board.G[i][j] = NULL;
+	// 			}
+	// 		}
+	// 	}
+	// }
+	// printf("------------------------------------------------------------------\n");
 	Board.displayGrid();
-	//move all the doodlebugs
-	for (int i = 0; i < gridSize; i++) {
-		for (int j = 0; j < gridSize; j++) {
-			if (Board.G[i][j] != NULL) {
-				if (!Board.G[i][j]->isPrey()) {
-					Board = Board.G[i][j]->move(Board);
-					Board.G[i][j] = NULL;
-				}
-			}
-		}
-	}
-	printf("------------------------------------------------------------------\n");
-	Board.displayGrid();
-
 	//move all the ants
 	for (int i = 0; i < gridSize; i++) {
 		for (int j = 0; j < gridSize; j++) {
@@ -114,9 +116,10 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 		}
 	}
 
+	Board.displayGrid();
+
 	printf("------------------------------------------------------------------\n");
 
-	Board.displayGrid();
 
 
 

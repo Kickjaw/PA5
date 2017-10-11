@@ -92,9 +92,9 @@ grid ant::move(grid Board){
 		optionsArray[options] = 4; // add right option to opt
 		options = options + 1;
 	}
+	std::cout << options << "x =" << x_loc << " y = "<< y_loc<<"\n";
 
 	if (options > 0) {
-		moved = true;
 		direction = optionsArray[rand() % options];
 	}
 
@@ -138,7 +138,6 @@ grid doodlebug::move(grid Board){
 	int new_x = x_loc;
 	int new_y = y_loc;
 	bool eat = false;
-	printf("tried to move\n");
 	if (!Board.checkUp(y_loc, x_loc)) {//checks if the cell is occupied
 		printf("Check up, occupied\n");
 		if (Board.G[y_loc][x_loc]->isPrey()) { //checks if is an ant
@@ -317,7 +316,7 @@ void grid::displayGrid(void) {
 			}
 			switch(bug){
 				case 0:
-					printf(" ");
+					printf("/");
 					break;
 				case 1:
 					printf("O");
@@ -341,7 +340,7 @@ bool grid::checkUp(int y_loc, int x_loc) {
 		return false;
 	}
 	else {
-		if (G[x_loc][y_loc-1] != NULL) {
+		if (G[y_loc][x_loc-1] != NULL) {
 			return false;
 		}
 		else{
@@ -355,7 +354,7 @@ bool grid::checkDown(int y_loc, int x_loc) {
 		return false;
 	}
 	else {
-		if (G[x_loc][y_loc+1] != NULL) {
+		if (G[y_loc][x_loc+1] != NULL) {
 			return false;
 		}
 		else {
@@ -370,7 +369,7 @@ bool grid::checkLeft(int y_loc, int x_loc) {
 		return false;
 	}
 	else {
-		if (G[x_loc-1][y_loc] != NULL) {
+		if (G[y_loc-1][x_loc] != NULL) {
 			return false;
 		}
 		else {
@@ -385,7 +384,7 @@ bool grid::checkRight(int y_loc, int x_loc) {
 		return false;
 	}
 	else {
-		if (G[x_loc+1][y_loc] != NULL) {
+		if (G[y_loc+1][x_loc] != NULL) {
 			return false;
 		}
 		else {

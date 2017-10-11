@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 	int gridSize = 10;
 	int doodlebugs = 5;
 	int ants = 10;
-	int time_steps = 1000;
+	int time_steps = 100;
 	int seed = 1;
 	int pause = 0;
 
@@ -99,7 +99,10 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 
 	Board.displayGrid();
 
+	printf("------------------------------------------------------------------\n");
+
 	while ((stepCount<time_steps)) {
+		printf("move doodlebugs\n");
 		//move all the doodlebugs
 		for (int i = 0; i < gridSize; i++) {
 			for (int j = 0; j < gridSize; j++) {
@@ -113,7 +116,7 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 				}
 			}
 		}
-		
+		printf("move ants\n");
 		//move all the ants
 		for (int i = 0; i < gridSize; i++) {
 			for (int j = 0; j < gridSize; j++) {
@@ -127,14 +130,28 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 				}
 			}
 		}
-
+		printf("check startvation\n");
 		//check startvation
+		for (int i = 0; i < gridSize; i++) {
+			for (int j = 0; j < gridSize; j++) {
+				if (Board.G[i][j] != NULL) {
+					if (!Board.G[i][j]->isPrey()){
+						if (Board.G[i][j]->getStarvation() >= 3) {
+							Board.G[i][j] = NULL;
+						}
+					}
+				}
+			}
+		}
+
+
+
+
 
 		for (int i = 0; i < gridSize; i++) {
 			for (int j = 0; j < gridSize; j++) {
 				if (Board.G[i][j] != NULL) {
 					Board.G[i][j] -> breed(Board);
-					printf("tried to breed\n");
 				}
 			}
 		}

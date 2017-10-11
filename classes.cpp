@@ -98,7 +98,7 @@ grid ant::move(grid Board){
 	int new_y = y_loc;
 	int direction;
 	int options = 0;
-	int optionsArray[4];
+	int optionsArray[4] = { 0 };
 
 
 	if (Board.checkUp(y_loc, x_loc)) {
@@ -122,27 +122,30 @@ grid ant::move(grid Board){
 
 	if (options > 0) {
 		direction = optionsArray[rand() % options];
-	}
+		switch(direction) {
+			case(1): //move up
+				new_y = y_loc-1;
+				break;
+			case(2): //move down
+				new_y = y_loc+1;
+				break;
+			case(3): //moce left
+				new_x = x_loc-1;
+				break;
+			case(4):
+				new_x = x_loc+1;
+				break;
+		}
 
-	switch(direction) {
-		case(1): //move up
-			new_y = y_loc-1;
-			break;
-		case(2): //move down
-			new_y = y_loc+1;
-			break;
-		case(3): //moce left
-			new_x = x_loc-1;
-			break;
-		case(4):
-			new_x = x_loc+1;
-			break;
+		Board.insertBug(new_x, new_y, 1);
+		//std::cout << direction << std::endl;
+		//std::cout << x_loc << " " << y_loc << std::endl;
+		//std::cout << new_x << " " << new_y << std::endl;
+		//std::cout << optionsArray[0] << " " << optionsArray[1] << " " << optionsArray[2] << " " << optionsArray[3] << ": " << options << std::endl;
+		Board.G[new_y][new_x] -> lifeSpan = lifeSpan + 1;
+		Board.G[new_y][new_x] -> breedCount = breedCount + 1;
+		Board.G[new_y][new_x] ->  moved = true;
 	}
-
-	Board.insertBug(new_x, new_y, 1);
-	Board.G[new_y][new_x] -> lifeSpan = Board.G[y_loc][x_loc] -> lifeSpan + 1;
-	Board.G[new_y][new_x] -> breedCount = Board.G[y_loc][x_loc] -> breedCount + 1;
-	Board.G[new_y][new_x] ->  moved = true;
 
 	return Board;
 }
@@ -156,7 +159,6 @@ void ant::breed(grid Board){
 	int options = 0;
 	int direction;
 	int breedOptionsArray[4];
-
 	if (breedCount >= 3) {
 		if (Board.checkUp(y_loc, x_loc)) {
 			breedOptionsArray[options] = 1; //add up option to option array
@@ -180,12 +182,16 @@ void ant::breed(grid Board){
 		switch(direction) {
 			case 1://add ant up
 				Board.G[y_loc-1][x_loc] = new ant();
+				break;
 			case 2://add ant down
 				Board.G[y_loc+1][x_loc] = new ant();
+				break;
 			case 3://add ant left
 				Board.G[y_loc][x_loc-1] = new ant();
+				break;
 			case 4://and ant right
 				Board.G[y_loc][x_loc+1] = new ant();
+				break;
 
 		}
 
@@ -224,6 +230,7 @@ grid doodlebug::move(grid Board){
 	int new_x = x_loc;
 	int new_y = y_loc;
 	bool eat = false;
+
 
 	if (!Board.checkUp(y_loc, x_loc) && (y_loc!=0)) {//checks if the cell is occupied
 		if (Board.G[y_loc-1][x_loc]->isPrey()) { //checks if is an ant
@@ -320,6 +327,7 @@ grid doodlebug::move(grid Board){
 		Board.G[new_y][new_x] -> lifeSpan = Board.G[y_loc][x_loc] -> lifeSpan + 1;
 		Board.G[new_y][new_x] -> breedCount = Board.G[y_loc][x_loc] -> breedCount + 1;
 		Board.G[new_y][new_x] ->  moved = true;
+		Board.G[new_y][new_x] -> starvation = starvation + 1;
 
 	}
 

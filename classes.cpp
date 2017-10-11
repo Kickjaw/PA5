@@ -39,18 +39,37 @@ grid::grid(int size) {
 }
 //organism methods
 //----------------------------------------------------------------------------------------------------
+/**
+ * helps print grid functions, diferenitiates the ants from doodlebugs
+ */
 int organism::whatAmI(void) {
 	return 0;
 }
-
+/**
+ * virtual function for move
+ */
 grid organism::move(grid Board){return Board;};
 
+/**
+ * virtual function for breed
+ */
 void organism::breed(grid G){};
 
-void organism::getStarvation(void){};
+/**
+ * getter for starvation
+ */
+int organism::getStarvation(void){
+	return 0;
+};
 
+/**
+ * virtual fucntion for eat 
+ */
 void organism::eat(void){};
 
+/**
+ * getter for prey boolean
+ */
 bool organism::isPrey(void) {
 	return prey;
 }
@@ -62,11 +81,18 @@ bool organism::isPrey(void) {
 
 //ant methods
 //-----------------------------------------------------------------------------------------------------
-
+/**
+ * helps print grid functions, diferenitiates the ants from doodlebugs
+ */
 int ant::whatAmI(void) {
 	return 1;
 }
 
+/**
+ * @param Board the grid class that holds the 2d array of all the cells
+ * takes in the board, check if the is an empty cell around the ant, and randomly chooses one if there is and moves
+ * the ant to that location
+ */
 grid ant::move(grid Board){
 	int new_x = x_loc;
 	int new_y = y_loc;
@@ -92,7 +118,7 @@ grid ant::move(grid Board){
 		optionsArray[options] = 4; // add right option to opt
 		options = options + 1;
 	}
-	std::cout << options << "x =" << x_loc << " y = "<< y_loc<<"\n";
+
 
 	if (options > 0) {
 		direction = optionsArray[rand() % options];
@@ -121,14 +147,74 @@ grid ant::move(grid Board){
 	return Board;
 }
 
-void ant::breed(grid G){};
+/**
+ * @param Board the grid class that holds the 2d array of all the cells
+ * Takes in the grid, checks if the ant has been alive for more then three turns, if so trys to add an ant in a random
+ * location arouind the ant if there is an empty cells
+ */
+void ant::breed(grid Board){
+	int options = 0;
+	int direction;
+	int breedOptionsArray[4];
+
+	if (breedCount >= 3) {
+		if (Board.checkUp(y_loc, x_loc)) {
+			breedOptionsArray[options] = 1; //add up option to option array
+			options = options + 1;
+		}
+		if (Board.checkDown(y_loc, x_loc)) {
+			breedOptionsArray[options] = 2; // add down option to option array
+			options = options + 1;
+		}
+		if (Board.checkLeft(y_loc, x_loc)) {
+			breedOptionsArray[options] = 3; //add left option to option array
+			options = options + 1;
+		}
+		if (Board.checkRight(y_loc, x_loc)) {
+			breedOptionsArray[options] = 4; // add right option to opt
+			options = options + 1;
+		}
+
+		direction = breedOptionsArray[rand() % options];
+
+		switch(direction) {
+			case 1://add ant up
+				Board.G[y_loc-1][x_loc] = new ant();
+			case 2://add ant down
+				Board.G[y_loc+1][x_loc] = new ant();
+			case 3://add ant left
+				Board.G[y_loc][x_loc-1] = new ant();
+			case 4://and ant right
+				Board.G[y_loc][x_loc+1] = new ant();
+
+		}
+
+	}
+
+}
+
+/**
+ * getter for prey boolean
+ */
+bool ant::isPrey(void) {
+	return prey;
+}
 
 //doodlebug methods
 //------------------------------------------------------------------------------------------------------
 
+/**
+ * helps print grid functions, diferenitiates the ants from doodlebugs
+ */
 int doodlebug::whatAmI(void) {
 	return 2;
 }
+
+/**
+ * @param Board the grid class that holds the 2d array of all the cells
+ * First checks the surrounding 4 cells to see if there is 1 or more ants, if yes it will randomly eat one of those
+ * ants, if not it moves like the an ant
+ */
 grid doodlebug::move(grid Board){
 	int direction;
 	int eatDirection;
@@ -138,31 +224,30 @@ grid doodlebug::move(grid Board){
 	int new_x = x_loc;
 	int new_y = y_loc;
 	bool eat = false;
-	if (!Board.checkUp(y_loc, x_loc)) {//checks if the cell is occupied
-		printf("Check up, occupied\n");
-		if (Board.G[y_loc][x_loc]->isPrey()) { //checks if is an ant
-			printf("found prey\n");
+
+	if (!Board.checkUp(y_loc, x_loc) && (y_loc!=0)) {//checks if the cell is occupied
+		if (Board.G[y_loc-1][x_loc]->isPrey()) { //checks if is an ant
 			eatOptionsArray[options] = 1; //adds eat up option
 			options = options + 1;
 			eat = true;
 		}
 	}
-	if (!Board.checkUp(y_loc, x_loc)) {//checks if the cell is occupied
-		if (Board.G[y_loc][x_loc]->isPrey()) { //checks if is an ant
+	if (!Board.checkDown(y_loc, x_loc) && (y_loc!=Board.gridSize-1)) {//checks if the cell is occupied
+		if (Board.G[y_loc+1][x_loc]->isPrey()) { //checks if is an ant
 			eatOptionsArray[options] = 2; //adds eat down option
 			options = options + 1;
 			eat = true;
 		}
 	}
-	if (!Board.checkUp(y_loc, x_loc)) {//checks if the cell is occupied
-		if (Board.G[y_loc][x_loc]->isPrey()) { //checks if is an ant
+	if (!Board.checkLeft(y_loc, x_loc) && (x_loc!=0)) {//checks if the cell is occupied
+		if (Board.G[y_loc][x_loc-1]->isPrey()) { //checks if is an ant
 			eatOptionsArray[options] = 3; //adds eat left option
 			options = options + 1;
 			eat = true;
 		}
 	}
-	if (!Board.checkUp(y_loc, x_loc)) {//checks if the cell is occupied
-		if (Board.G[y_loc][x_loc]->isPrey()) { //checks if is an ant
+	if (!Board.checkRight(y_loc, x_loc) && (x_loc!=Board.gridSize-1)) {//checks if the cell is occupied
+		if (Board.G[y_loc][x_loc+1]->isPrey()) { //checks if is an ant
 			eatOptionsArray[options] = 4; //adds eat right option
 			options = options + 1;
 			eat = true;
@@ -241,6 +326,11 @@ grid doodlebug::move(grid Board){
 	return Board;
 }
 
+/**
+ * @param Board the grid class that holds the 2d array of all the cells
+ * Takes in the grid, checks if the doodlebug has been alive for more then 8 turns, if so trys to add an ant in a random
+ * location arouind the ant if there is an empty cells
+ */
 void doodlebug::breed(grid G){
 	int options = 0;
 	int direction;
@@ -283,11 +373,28 @@ void doodlebug::breed(grid G){
 	}
 }
 
+/**
+ * getter for starvation
+ */
+int doodlebug::getStarvation(void){
+	return starvation;
+};
 
-void doodlebug::getStarvation(void){};
+/**
+ * getter for prey boolean
+ */
+bool doodlebug::isPrey(void) {
+	return prey;
+}
 
 //grid methods
 //---------------------------------------------------------------------------------------------
+/**
+ * @param x x location to insert the but in
+ * @param y y location to insert the bug in
+ * @param bugtype type of bug to insert in the board
+ * takes in the locatino and the bugtype and inserts a new bug of that type in the board and the given location
+ */
 void grid::insertBug(int x, int y, int bugType) {
 	if (bugType == 1) {
 		ant *A = new ant();
@@ -303,6 +410,9 @@ void grid::insertBug(int x, int y, int bugType) {
 	}
 }
 
+/**
+ * prints out the whole board formated
+ */
 void grid::displayGrid(void) {
 	int bug;
 	
@@ -333,14 +443,14 @@ void grid::displayGrid(void) {
 	}
 }
 /**
- * takes in x and y location and checks if the cell above it and returns true if free and false if not
+ * takes in x and y location and checks if the cell the direction it and returns true if free and false if not
  */
 bool grid::checkUp(int y_loc, int x_loc) {
 	if (y_loc == 0) {
 		return false;
 	}
 	else {
-		if (G[y_loc][x_loc-1] != NULL) {
+		if (G[y_loc-1][x_loc] != NULL) {
 			return false;
 		}
 		else{
@@ -349,12 +459,15 @@ bool grid::checkUp(int y_loc, int x_loc) {
 	}
 }
 
+/**
+ * takes in x and y location and checks if the cell the direction it and returns true if free and false if not
+ */
 bool grid::checkDown(int y_loc, int x_loc) {
 	if (y_loc == gridSize-1) {
 		return false;
 	}
 	else {
-		if (G[y_loc][x_loc+1] != NULL) {
+		if (G[y_loc+1][x_loc] != NULL) {
 			return false;
 		}
 		else {
@@ -364,12 +477,15 @@ bool grid::checkDown(int y_loc, int x_loc) {
 
 }
 
+/**
+ * takes in x and y location and checks if the cell the direction it and returns true if free and false if not
+ */
 bool grid::checkLeft(int y_loc, int x_loc) {
 	if (x_loc == 0) {
 		return false;
 	}
 	else {
-		if (G[y_loc-1][x_loc] != NULL) {
+		if (G[y_loc][x_loc-1] != NULL) {
 			return false;
 		}
 		else {
@@ -379,12 +495,15 @@ bool grid::checkLeft(int y_loc, int x_loc) {
 
 }
 
+/**
+ * takes in x and y location and checks if the cell the direction it and returns true if free and false if not
+ */
 bool grid::checkRight(int y_loc, int x_loc) {
 	if (x_loc == gridSize-1) {
 		return false;
 	}
 	else {
-		if (G[y_loc+1][x_loc] != NULL) {
+		if (G[y_loc][x_loc+1] != NULL) {
 			return false;
 		}
 		else {

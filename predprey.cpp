@@ -42,6 +42,15 @@ grid generateDoodlebugs(int doodlebugs, grid Board, int gridSize) {
 	return Board;
 }
 
+void resetMove(grid Board) {
+	for (int i = 0; i < Board.gridSize; i++) {
+		for (int j = 0; j < Board.gridSize; j++) {
+			if (Board.G[i][j] != NULL) {
+				Board.G[i][j] -> moved = false;
+			}
+		}
+	}
+}
 
 
 int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps seed pause
@@ -75,9 +84,10 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 			gridSize = atoi(argv[1]);
 		case 1:
 			break;
-
-
 	}
+
+	bool termination = false;
+	int stepCount = 0;
 
 	srand(seed);
 
@@ -85,41 +95,59 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 
 	Board = generateAnts(ants, Board, gridSize);
 
-	// Board = generateDoodlebugs(doodlebugs, Board, gridSize);
+	Board = generateDoodlebugs(doodlebugs, Board, gridSize);
 
-	// Board.displayGrid();
-	// //move all the doodlebugs
-	// int count = 0;
-	// for (int i = 0; i < gridSize; i++) {
-	// 	for (int j = 0; j < gridSize; j++) {
-	// 		if (Board.G[i][j] != NULL) {
-	// 				count++;
-	// 				printf("%i\n", count);
-	// 			if (!Board.G[i][j]->isPrey()) {
-	// 				Board = Board.G[i][j]->move(Board);
-	// 				Board.G[i][j] = NULL;
-	// 			}
-	// 		}
-	// 	}
-	// }
-	// printf("------------------------------------------------------------------\n");
 	Board.displayGrid();
-	//move all the ants
-	for (int i = 0; i < gridSize; i++) {
-		for (int j = 0; j < gridSize; j++) {
-			if (Board.G[i][j] != NULL) {
-				if (Board.G[i][j]->isPrey()) {
-					Board = Board.G[i][j]->move(Board);
-					Board.G[i][j] = NULL;
+
+	while ((stepCount<time_steps)) {
+		//move all the doodlebugs
+		for (int i = 0; i < gridSize; i++) {
+			for (int j = 0; j < gridSize; j++) {
+				if (Board.G[i][j] != NULL) {
+					if (!Board.G[i][j]->isPrey()) {
+						if (!Board.G[i][j]->moved){
+							Board = Board.G[i][j]->move(Board);
+							Board.G[i][j] = NULL;
+						}
+					}
 				}
 			}
 		}
+		
+		//move all the ants
+		for (int i = 0; i < gridSize; i++) {
+			for (int j = 0; j < gridSize; j++) {
+				if (Board.G[i][j] != NULL) {
+					if (Board.G[i][j]->isPrey()) {
+						if (!Board.G[i][j]->moved){
+							Board = Board.G[i][j]->move(Board);
+							Board.G[i][j] = NULL;
+						}
+					}
+				}
+			}
+		}
+
+		//check startvation
+
+		for (int i = 0; i < gridSize; i++) {
+			for (int j = 0; j < gridSize; j++) {
+				if (Board.G[i][j] != NULL) {
+					Board.G[i][j] -> breed(Board);
+					printf("tried to breed\n");
+				}
+			}
+		}
+
+
+		Board.displayGrid();
+
+		resetMove(Board);
+
+		printf("------------------------------------------------------------------\n");
+
+		stepCount++;
 	}
-
-	Board.displayGrid();
-
-	printf("------------------------------------------------------------------\n");
-
 
 
 

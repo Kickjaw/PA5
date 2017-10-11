@@ -39,9 +39,9 @@ public:
 	virtual int whatAmI(void);
 	virtual grid move(grid Board);
 	virtual void breed(grid G);
-	virtual void getStarvation(void);
+	virtual int getStarvation(void);
 	virtual void eat(void);
-	bool isPrey(void);
+	virtual bool isPrey(void);
 
 };
 
@@ -51,7 +51,7 @@ public:
 	virtual int whatAmI(void);
 	virtual grid move(grid Board);
 	virtual void breed(grid G);
-	
+	virtual bool isPrey(void);
 
 
 
@@ -66,8 +66,8 @@ public:
 	virtual int whatAmI(void);
 	virtual grid move(grid Board);
 	virtual void breed(grid G);
-	virtual void getStarvation(void);
-	
+	virtual int getStarvation(void);
+	virtual bool isPrey(void);
 
 
 };

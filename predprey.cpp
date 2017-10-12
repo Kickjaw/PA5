@@ -202,4 +202,12 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 	std::cout << "Total doodlebugs: " << Board.totalDoodleBugs << " Doodlebugs remaining: " << doodlebugRemain << std::endl;
 	Board.displayGrid();
 
+	for (int i = 0; i < gridSize; i++) {
+		for (int j = 0; j < gridSize; j++) {
+			if (Board.G[i][j] != NULL) {
+				delete Board.G[i][j];
+			}
+		}
+	}
+
 }

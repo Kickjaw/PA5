@@ -60,10 +60,10 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 		return 1;
 	}
 	//defaul values for command line arguments
-	int gridSize = 10;
+	int gridSize = 20;
 	int doodlebugs = 5;
-	int ants = 10;
-	int time_steps = 100;
+	int ants = 100;
+	int time_steps = 1000;
 	int seed = 1;
 	int pause = 0;
 
@@ -88,12 +88,14 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 
 	bool termination = false;
 	int stepCount = 0;
+	int antsRemain = 0;
+	int doodlebugRemain = 0;
 
-	srand(seed);
+	srand(seed); //seed the random function
 
-	grid Board(gridSize);
+	grid Board(gridSize); // create board
 
-	Board = generateAnts(ants, Board, gridSize);
+	Board = generateAnts(ants, Board, gridSize); 
 
 	Board = generateDoodlebugs(doodlebugs, Board, gridSize);
 
@@ -101,8 +103,7 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 
 	printf("------------------------------------------------------------------\n");
 
-	while ((stepCount<time_steps)) {
-		printf("move doodlebugs\n");
+	while ((stepCount<time_steps) && (!termination)) {
 		//move all the doodlebugs
 		for (int i = 0; i < gridSize; i++) {
 			for (int j = 0; j < gridSize; j++) {
@@ -116,7 +117,6 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 				}
 			}
 		}
-		printf("move ants\n");
 		//move all the ants
 		for (int i = 0; i < gridSize; i++) {
 			for (int j = 0; j < gridSize; j++) {
@@ -124,13 +124,12 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 					if (Board.G[i][j]->isPrey()) {
 						if (!Board.G[i][j]->moved){
 							Board = Board.G[i][j]->move(Board);
-							Board.G[i][j] = NULL;
+							Board.G[i][j] = NULL; //remove the bug from its starting location
 						}
 					}
 				}
 			}
 		}
-		printf("check startvation\n");
 		//check startvation
 		for (int i = 0; i < gridSize; i++) {
 			for (int j = 0; j < gridSize; j++) {
@@ -144,28 +143,63 @@ int main(int argc, char *argv[]) { //./PA5 gridSize #doodlebugs #ant #time_steps
 			}
 		}
 
+		//breed ants and doodlebugs
+		for (int i = 0; i < gridSize; i++) {
+			for (int j = 0; j < gridSize; j++) {
+				if (Board.G[i][j] != NULL) {
+					Board = Board.G[i][j]->breed(Board);
+				}
+			}
+		}
 
+		Board.displayGrid();
 
+		resetMove(Board); //reset set the move boolean of the organisms
 
+		printf("------------------------------------------------------------------\n");
+
+		stepCount++;
+		termination = true; //sets termination to true
 
 		for (int i = 0; i < gridSize; i++) {
 			for (int j = 0; j < gridSize; j++) {
 				if (Board.G[i][j] != NULL) {
-					Board.G[i][j] -> breed(Board);
+					termination = false; //if there is anything on the board it then sets it back to false
 				}
 			}
 		}
 
 
-		Board.displayGrid();
+		if (pause > 0) { //puase the sim until key press
+			printf("Press enter to contiue");
+			getchar();
+		}
 
-		resetMove(Board);
+		
 
-		printf("------------------------------------------------------------------\n");
-
-		stepCount++;
+	} 
+	//counts the remaing bugs on the board
+	for (int i = 0; i < gridSize; i++) {
+		for (int j = 0; j < gridSize; j++) {
+			if (Board.G[i][j] != NULL) {
+				if (Board.G[i][j] -> isPrey ()) {
+					antsRemain++;
+				}
+				else {
+					doodlebugRemain++;
+				}
+			}
+		}
 	}
 
 
+	for (int i = 0; i < argc; i++) {
+		std::cout << argv[i] << " ";
+	}
+	std::cout << std::endl;
+	std::cout << "Total steps: " << stepCount << std::endl;
+	std::cout << "Total ants: " << Board.totalAnts << " Ants remaining: "<< antsRemain << std::endl;
+	std::cout << "Total doodlebugs: " << Board.totalDoodleBugs << " Doodlebugs remaining: " << doodlebugRemain << std::endl;
+	Board.displayGrid();
 
 }

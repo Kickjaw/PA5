@@ -9,6 +9,10 @@ class organism;
 class grid {
 public:
 	int gridSize;
+	int antsInBoard;
+	int totalAnts;
+	int doodlebugsInBoard;
+	int totalDoodleBugs;
 	organism ***G;
 
 	grid(int size);
@@ -38,7 +42,7 @@ public:
 
 	virtual int whatAmI(void);
 	virtual grid move(grid Board);
-	virtual void breed(grid G);
+	virtual grid breed(grid G);
 	virtual int getStarvation(void);
 	virtual void eat(void);
 	virtual bool isPrey(void);
@@ -50,7 +54,7 @@ public:
 
 	virtual int whatAmI(void);
 	virtual grid move(grid Board);
-	virtual void breed(grid G);
+	virtual grid breed(grid G);
 	virtual bool isPrey(void);
 
 
@@ -65,7 +69,7 @@ public:
 
 	virtual int whatAmI(void);
 	virtual grid move(grid Board);
-	virtual void breed(grid G);
+	virtual grid breed(grid G);
 	virtual int getStarvation(void);
 	virtual bool isPrey(void);
 
